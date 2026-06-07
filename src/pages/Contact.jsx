@@ -75,7 +75,6 @@ const Contact = () => {
 
   return (
     <>
-      <Toaster position="top-center" reverseOrder={false} />
       <main className="section-padding-top pt-24 section-padding-bottom">
         <div className="container-custom">
           {/* Header */}

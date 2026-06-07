@@ -37,15 +37,15 @@ const Navbar = () => {
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.to}
                 // exact={link.to === "/"}
-                href={link.to}
+                to={link.to}
                 className="btn-ghost"
                 activeClassName="text-white bg-white/10"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
 

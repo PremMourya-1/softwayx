@@ -1,15 +1,150 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { products } from "../data/products";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import { userApi } from "../Service/api";
+import toast from "react-hot-toast";
+
+const initialRegisterValues = {
+  address: "kamla nehru nagar jaipur",
+  city: "jaipur",
+  email: "premmourya084@gmail.com",
+  gymName: "Mirror of fitnessaa",
+  ownerName: "Aryash Meenaaa",
+  password: "Admin@12345",
+  phone: "08824644769",
+  planId: "free",
+  planStartDate: new Date().toISOString().slice(0, 10),
+  state: "Rajasthan",
+  username: "8824644769",
+};
+
+const initialRegisterErrors = {
+  email: "",
+  gymName: "",
+  ownerName: "",
+  password: "",
+  phone: "",
+  username: "",
+};
 
 const ProductDetail = () => {
   const { id } = useParams();
   const product = products.find((p) => p.id === id);
-  useEffect(() => {
-    window.scrollTo(0);
-  }, [id]);
 
   const [preview, setPreview] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [registerValues, setRegisterValues] = useState(initialRegisterValues);
+  const [registerErrors, setRegisterErrors] = useState(initialRegisterErrors);
+  const [registerSubmitting, setRegisterSubmitting] = useState(false);
+  const [registerError, setRegisterError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const resetRegisterForm = () => {
+    setRegisterValues({
+      // ...initialRegisterValues,
+      planStartDate: new Date().toISOString().slice(0, 10),
+    });
+    setRegisterErrors(initialRegisterErrors);
+    setRegisterError("");
+    setSuccessMessage("");
+    setShowPassword(false);
+  };
+
+  const openRegisterModal = (e) => {
+    e.preventDefault();
+    resetRegisterForm();
+    setIsModalOpen(true);
+  };
+
+  const closeRegisterModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleRegisterChange = (field) => (e) => {
+    setRegisterValues((prev) => ({ ...prev, [field]: e.target.value }));
+    setRegisterErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const validateRegister = () => {
+    const values = registerValues || initialRegisterValues;
+    const errors = {};
+
+    if (!values.email?.trim()) {
+      errors.email = "Email is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+      errors.email = "Enter a valid email.";
+    }
+
+    if (!values.username?.trim()) {
+      errors.username = "Username is required.";
+    }
+
+    if (!values.gymName?.trim()) {
+      errors.gymName = "Gym name is required.";
+    }
+
+    if (!values.ownerName?.trim()) {
+      errors.ownerName = "Owner name is required.";
+    }
+
+    if (!values.phone?.trim()) {
+      errors.phone = "Phone number is required.";
+    } else if (!/^\d{10,15}$/.test(values.phone.replace(/\s/g, ""))) {
+      errors.phone = "Enter a valid phone number.";
+    }
+
+    if (!values.password) {
+      errors.password = "Password is required.";
+    } else if (values.password.length < 8) {
+      errors.password = "Password must be at least 8 characters.";
+    }
+
+    return errors;
+  };
+
+  const submitRegisterForm = async (e) => {
+    e.preventDefault();
+    setRegisterError("");
+
+    const errors = validateRegister();
+    if (Object.keys(errors).length) {
+      setRegisterErrors(errors);
+      return;
+    }
+
+    setRegisterSubmitting(true);
+
+    try {
+      const res = await userApi.freeRegister(registerValues);
+      if (res.data.action) {
+        toast.success(
+          "Registration successful! Redirecting to gymfox.softwayx.in...",
+        );
+
+        closeRegisterModal();
+
+        const mobile = registerValues.phone;
+        const password = registerValues.password;
+        setTimeout(() => {
+          window.open(
+            `https://gymfox.softwayx.in/login?mobileno=${mobile}&password=${password}`,
+            "_blank",
+          );
+        }, 2000);
+      } else {
+        toast.error(
+          res.data.message || "Registration failed. Please try again.",
+        );
+      }
+    } catch {
+      toast.error("Server error. Please try again later.");
+    } finally {
+      setRegisterSubmitting(false);
+    }
+  };
 
   if (!product) {
     return (
@@ -52,6 +187,146 @@ const ProductDetail = () => {
               onClick={(e) => e.stopPropagation()}
               className="max-h-[90vh] max-w-[90vw] object-contain rounded-md shadow-xl"
             />
+          </div>
+        </div>
+      ) : null}
+
+      {isModalOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          onClick={closeRegisterModal}
+          tabIndex={0}
+          onKeyDown={(e) => e.key === "Escape" && closeRegisterModal()}
+        >
+          <div
+            className="relative w-full max-w-3xl rounded-3xl bg-[#08101e] p-6 md:p-8 shadow-2xl max-h-[calc(100vh-4rem)] overflow-y-auto modal-scrollbar"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={closeRegisterModal}
+              className="absolute right-4 top-4 text-xl text-white/80 hover:text-white"
+              aria-label="Close registration"
+            >
+              ✕
+            </button>
+            <div className="mb-6">
+              <h2 className="text-3xl font-bold text-white mb-2">
+                Start Free with Gym Fox
+              </h2>
+              <p className="text-gray-400">
+                Plan includes 1 month free access. Submit the form to register
+                and you will be redirected to gymfox.softwayx.in.
+              </p>
+            </div>
+            <form
+              onSubmit={submitRegisterForm}
+              noValidate
+              className="space-y-5"
+            >
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="Gym Name"
+                  value={registerValues.gymName}
+                  onChange={handleRegisterChange("gymName")}
+                  error={registerErrors.gymName}
+                  required
+                />
+                <Input
+                  label="Owner Name"
+                  value={registerValues.ownerName}
+                  onChange={handleRegisterChange("ownerName")}
+                  error={registerErrors.ownerName}
+                  required
+                />
+                <Input
+                  label="Email Address"
+                  type="email"
+                  value={registerValues.email}
+                  onChange={handleRegisterChange("email")}
+                  error={registerErrors.email}
+                  required
+                />
+                <Input
+                  label="Username"
+                  value={registerValues.username}
+                  onChange={handleRegisterChange("username")}
+                  error={registerErrors.username}
+                  required
+                />
+                <Input
+                  label="Phone Number"
+                  type="tel"
+                  value={registerValues.phone}
+                  onChange={handleRegisterChange("phone")}
+                  error={registerErrors.phone}
+                  required
+                />
+                <div className="relative">
+                  <Input
+                    label="Password"
+                    type={showPassword ? "text" : "password"}
+                    value={registerValues.password}
+                    onChange={handleRegisterChange("password")}
+                    error={registerErrors.password}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400 hover:text-white"
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+                <Input
+                  label="City"
+                  value={registerValues.city}
+                  onChange={handleRegisterChange("city")}
+                />
+                <Input
+                  label="State"
+                  value={registerValues.state}
+                  onChange={handleRegisterChange("state")}
+                />
+                <div className="relative col-span-2">
+                  <textarea
+                    rows={4}
+                    placeholder="Address"
+                    value={registerValues.address}
+                    onChange={handleRegisterChange("address")}
+                    className="input-field peer h-28 resize-none"
+                  />
+                  <label className="input-label top-3 peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-brand-blue peer-focus:bg-brand-dark peer-focus:px-1 peer-[&:not(:placeholder-shown)]:-top-2.5 peer-[&:not(:placeholder-shown)]:text-xs peer-[&:not(:placeholder-shown)]:text-gray-400 peer-[&:not(:placeholder-shown)]:bg-brand-dark peer-[&:not(:placeholder-shown)]:px-1">
+                    Address
+                  </label>
+                </div>
+              </div>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm text-gray-400">
+                  Plan: <span className="text-white">1 Month Free</span> · Start
+                  date:{" "}
+                  <span className="text-white">
+                    {registerValues.planStartDate}
+                  </span>
+                </p>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  className="w-full sm:w-auto px-6 py-3 text-base"
+                  disabled={registerSubmitting}
+                >
+                  {registerSubmitting ? "Submitting..." : "Submit Registration"}
+                </Button>
+              </div>
+              {registerError && (
+                <p className="text-sm text-red-400">{registerError}</p>
+              )}
+              {successMessage && (
+                <p className="text-sm text-emerald-400">
+                  {successMessage}. Redirecting to gymfox.softwayx.in...
+                </p>
+              )}
+            </form>
           </div>
         </div>
       ) : null}
@@ -111,12 +386,21 @@ const ProductDetail = () => {
 
               {/* CTA */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  to="/register"
-                  className="inline-flex items-center justify-center rounded-2xl bg-brand-blue px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:bg-blue-500 hover:shadow-[0_15px_40px_-12px_rgba(37,99,235,0.6)]"
-                >
-                  Get Started Free
-                </Link>
+                {product.id === "gym-crm" ? (
+                  <button
+                    onClick={openRegisterModal}
+                    className="inline-flex items-center justify-center rounded-2xl bg-brand-blue px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:bg-blue-500 hover:shadow-[0_15px_40px_-12px_rgba(37,99,235,0.6)]"
+                  >
+                    Get Started Free
+                  </button>
+                ) : (
+                  <Link
+                    to="/register"
+                    className="inline-flex items-center justify-center rounded-2xl bg-brand-blue px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:bg-blue-500 hover:shadow-[0_15px_40px_-12px_rgba(37,99,235,0.6)]"
+                  >
+                    Get Started Free
+                  </Link>
+                )}
 
                 <Link
                   to="/contact"
@@ -262,12 +546,21 @@ const ProductDetail = () => {
                   Set up in minutes. No credit card required. Cancel anytime.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Link
-                    to="/register"
-                    className="btn-primary text-base px-8 py-3"
-                  >
-                    Register / Get Started
-                  </Link>
+                  {product.id === "gym-crm" ? (
+                    <button
+                      onClick={openRegisterModal}
+                      className="btn-primary text-base px-8 py-3"
+                    >
+                      Register / Get Started
+                    </button>
+                  ) : (
+                    <Link
+                      to="/register"
+                      className="btn-primary text-base px-8 py-3"
+                    >
+                      Register / Get Started
+                    </Link>
+                  )}
                   <Link to="/" className="btn-ghost text-base">
                     ← Back to Products
                   </Link>

@@ -64,7 +64,7 @@ const Footer = () => {
         {/* Bottom row */}
         <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-gray-500 text-xs">
           <span>
-            © {new Date().getFullYear()} PremSoft Technologies. All rights
+            © {new Date().getFullYear()} softwayx Technologies. All rights
             reserved.
           </span>
           <div className="flex items-center gap-4">

@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom";
 
 const teamMembers = [
-  { name: "Prem Kumar", role: "Founder & CEO", emoji: "👨‍💼" },
-  { name: "Anita Sharma", role: "Head of Product", emoji: "👩‍💻" },
-  { name: "Rajan Mehta", role: "Lead Engineer", emoji: "👨‍🔧" },
-  { name: "Priya Nair", role: "Design Lead", emoji: "🎨" },
+  { name: "Prem Mourya", role: "Founder & CEO", emoji: "👨‍💼" },
+  { name: "Sadhana Mundotiya", role: "Design Lead", emoji: "🎨" },
+  { name: "Karan Mourya", role: "Development Lead", emoji: "👨‍💻" },
+  { name: "Pawan Mourya", role: "Marketing Head", emoji: "📈" },
 ];
-
 const values = [
   {
     icon: "🚀",
@@ -53,7 +52,7 @@ const About = () => {
         </div>
 
         {/* Values */}
-        <section className="mb-20">
+        {/* <section className="mb-20">
           <h2 className="text-2xl font-bold text-center mb-10">
             What We <span className="gradient-text">Stand For</span>
           </h2>
@@ -66,7 +65,7 @@ const About = () => {
               </div>
             ))}
           </div>
-        </section>
+        </section> */}
 
         {/* Team */}
         <section className="mb-20">

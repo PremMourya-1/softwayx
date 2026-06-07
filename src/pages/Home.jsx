@@ -114,15 +114,15 @@ const Home = () => {
               </h2>
               <p className="section-subtitle mx-auto text-center mb-8">
                 Join thousands of businesses already running smarter with
-                PremSoft.
+                Softwayx.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link
+                {/* <Link
                   to="/register"
                   className="btn-primary text-base px-8 py-3"
                 >
                   Start Free Trial
-                </Link>
+                </Link> */}
                 <Link to="/contact">
                   <Button variant="secondary" className="text-base px-8 py-3">
                     Talk to Sales

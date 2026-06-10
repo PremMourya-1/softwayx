@@ -1,12 +1,10 @@
-import { BrowserRouter as Router } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import AppRoutes from "./routes/AppRoutes";
 import { Toaster } from "react-hot-toast";
+import { BrowserRouter } from "react-router-dom";
 
 const App = () => {
   return (
-    <Router>
+    <BrowserRouter>
       <Toaster
         position="bottom-center"
         reverseOrder={false}
@@ -18,14 +16,9 @@ const App = () => {
           },
         }}
       />
-      <div className="flex flex-col min-h-screen overflow-x-hidden">
-        <Navbar />
-        <div className="flex-1">
-          <AppRoutes />
-        </div>
-        <Footer />
-      </div>
-    </Router>
+
+      <AppRoutes />
+    </BrowserRouter>
   );
 };
 

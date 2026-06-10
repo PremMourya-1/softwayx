@@ -11,13 +11,22 @@ export default defineConfig([
     files: ["**/*.{js,jsx}"],
     extends: [
       js.configs.recommended,
+      ...reactPlugin.configs.flat.recommended,
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
     ],
-    plugins: { react: reactPlugin },
+    plugins: {
+      react: reactPlugin,
+    },
     languageOptions: {
       globals: globals.browser,
-      parserOptions: { ecmaFeatures: { jsx: true } },
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
     },
     rules: {
       "no-unused-vars": "error",

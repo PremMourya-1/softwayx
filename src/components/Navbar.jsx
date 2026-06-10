@@ -30,7 +30,7 @@ const Navbar = () => {
             <img
               src={logo}
               alt="SoftwayX logo"
-              className="h-full w-full max-w-[160px]"
+              className="h-full w-full max-w-[200px]"
             />
           </Link>
 

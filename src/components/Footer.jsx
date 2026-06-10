@@ -1,5 +1,5 @@
+import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
-
 const footerLinks = {
   Products: [
     { label: "Gym CRM", to: "/product/gym-crm" },
@@ -26,14 +26,16 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
+            {/* Logo */}
             <Link
               to="/"
               className="flex items-center gap-2 text-white font-bold text-xl mb-3"
             >
-              <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-blue to-purple-600 flex items-center justify-center text-sm font-black shadow-glow-sm">
-                P
-              </span>
-              <span className="gradient-text">PremSoft</span>
+              <img
+                src={logo}
+                alt="SoftwayX logo"
+                className="h-full w-full max-w-[180px]"
+              />
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
               Modern SaaS solutions for growing businesses. Streamline

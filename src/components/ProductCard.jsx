@@ -1,26 +1,13 @@
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
-  const history = useHistory();
-
   const isUpcoming = product.upcoming;
 
-  const handleNavigation = () => {
-    if (!isUpcoming) {
-      history.push(`/product/${product.id}`);
-    }
-  };
-
   return (
-    <div
-      onClick={handleNavigation}
+    <Link
+      to={isUpcoming ? "#" : `/product/${product.id}`}
       role={!isUpcoming ? "button" : undefined}
       tabIndex={!isUpcoming ? 0 : -1}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" && !isUpcoming) {
-          history.push(`/product/${product.id}`);
-        }
-      }}
       aria-label={`View details for ${product.title}`}
       className={`group relative overflow-hidden rounded-[32px] border backdrop-blur-xl transition-all duration-500 ${
         isUpcoming
@@ -150,7 +137,7 @@ const ProductCard = ({ product }) => {
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

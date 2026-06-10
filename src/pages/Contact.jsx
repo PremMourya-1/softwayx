@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { submitContact } from "./contactService";
+import { useNavigate } from "react-router-dom";
 
 const contactInfo = [
   { icon: "📧", label: "Email", value: "softwayxinfo@gmail.com" },
@@ -17,7 +17,6 @@ const contactInfo = [
 ];
 
 const Contact = () => {
-  const history = useHistory();
   const [values, setValues] = useState({
     name: "",
     mobile: "",
@@ -50,6 +49,7 @@ const Contact = () => {
     setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = validate();
@@ -64,9 +64,8 @@ const Contact = () => {
       const success = await submitContact(values);
       if (success) {
         setValues({ name: "", mobile: "", subject: "", message: "" });
-        setTimeout(() => {
-          history.push("/thank-you");
-        }, 1500);
+        setTimeout(() => {}, 1500);
+        navigate("/thank-you");
       }
     } finally {
       setSubmitting(false);

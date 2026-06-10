@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import About from "./About";
 
 const Home = () => {
+  const abc = " ";
   return (
     <main>
       {/* ── Hero ── */}

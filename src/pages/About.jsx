@@ -1,10 +1,30 @@
 import { Link } from "react-router-dom";
 
 const teamMembers = [
-  { name: "Prem Mourya", role: "Founder & CEO", emoji: "👨‍💼" },
-  { name: "Sadhana Mundotiya", role: "Design Lead", emoji: "🎨" },
-  { name: "Karan Mourya", role: "Development Lead", emoji: "👨‍💻" },
-  { name: "Pawan Mourya", role: "Marketing Head", emoji: "📈" },
+  {
+    name: "Prem Mourya",
+    role: "Founder & CEO",
+    photo:
+      "https://ui-avatars.com/api/?name=Prem+Mourya&background=111827&color=ffffff&rounded=true",
+  },
+  {
+    name: "Ravi Kasotiya",
+    role: "Design Lead",
+    photo:
+      "https://ui-avatars.com/api/?name=Ravi+Kasotiya&background=111827&color=ffffff&rounded=true",
+  },
+  {
+    name: "Karan Mourya",
+    role: "Development Lead",
+    photo:
+      "https://ui-avatars.com/api/?name=Karan+Mourya&background=111827&color=ffffff&rounded=true",
+  },
+  {
+    name: "Pawan Mourya",
+    role: "Marketing Head",
+    photo:
+      "https://ui-avatars.com/api/?name=Pawan+Mourya&background=111827&color=ffffff&rounded=true",
+  },
 ];
 const values = [
   {
@@ -75,9 +95,11 @@ const About = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {teamMembers.map((m) => (
               <div key={m.name} className="card text-center">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-brand-blue to-purple-600 flex items-center justify-center text-3xl mx-auto mb-4 shadow-glow-sm">
-                  {m.emoji}
-                </div>
+                <img
+                  src={m.photo}
+                  alt={m.name}
+                  className="w-20 h-20 rounded-full object-cover mx-auto mb-4 shadow-glow-sm"
+                />
                 <h3 className="text-white font-semibold">{m.name}</h3>
                 <p className="text-gray-400 text-xs mt-1">{m.role}</p>
               </div>

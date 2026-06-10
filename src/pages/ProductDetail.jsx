@@ -41,6 +41,34 @@ const ProductDetail = () => {
   const [registerError, setRegisterError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [activeFaq, setActiveFaq] = useState(0);
+  const [verificationStep, setVerificationStep] = useState("email");
+  const [verifyEmail, setVerifyEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpError, setOtpError] = useState("");
+  const [countdown, setCountdown] = useState(0);
+  const [sendingOtp, setSendingOtp] = useState(false);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
+
+  useEffect(() => {
+    if (countdown <= 0) return;
+    const timer = window.setInterval(() => {
+      setCountdown((current) => Math.max(current - 1, 0));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [countdown]);
+
+  const resetVerification = () => {
+    setVerificationStep("email");
+    setVerifyEmail("");
+    setEmailError("");
+    setOtp("");
+    setOtpError("");
+    setCountdown(0);
+    setSendingOtp(false);
+    setVerifyingOtp(false);
+  };
 
   const resetRegisterForm = () => {
     setRegisterValues({
@@ -51,6 +79,7 @@ const ProductDetail = () => {
     setRegisterError("");
     setSuccessMessage("");
     setShowPassword(false);
+    resetVerification();
   };
 
   const openRegisterModal = (e) => {
@@ -61,11 +90,106 @@ const ProductDetail = () => {
 
   const closeRegisterModal = () => {
     setIsModalOpen(false);
+    resetVerification();
   };
 
   const handleRegisterChange = (field) => (e) => {
     setRegisterValues((prev) => ({ ...prev, [field]: e.target.value }));
     setRegisterErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const validateVerifyEmail = () => {
+    if (!verifyEmail.trim()) return "Email is required.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(verifyEmail))
+      return "Enter a valid email.";
+    return "";
+  };
+
+  const sendVerificationCode = async (e) => {
+    e.preventDefault();
+    const error = validateVerifyEmail();
+    if (error) {
+      setEmailError(error);
+      return;
+    }
+
+    setSendingOtp(true);
+    setEmailError("");
+
+    try {
+      const res = await userApi.sendVerificationCode({ email: verifyEmail });
+      if (res?.data?.action ?? true) {
+        toast.success("Verification code sent. Enter OTP below.");
+        setVerificationStep("otp");
+        setCountdown(30);
+      } else {
+        toast.error(res?.data?.message || "Unable to send verification code.");
+      }
+    } catch (err) {
+      toast.error(
+        err?.response?.data?.message ||
+          "Unable to send verification code. Please try again.",
+      );
+    } finally {
+      setSendingOtp(false);
+    }
+  };
+
+  const verifyOtpCode = async (e) => {
+    e.preventDefault();
+    if (!otp.trim()) {
+      setOtpError("OTP is required.");
+      return;
+    }
+
+    setVerifyingOtp(true);
+    setOtpError("");
+
+    try {
+      const res = await userApi.verifyEmailOtp({ email: verifyEmail, otp });
+      if (res?.data?.action ?? true) {
+        toast.success("Email verified. Complete the registration form.");
+        setVerificationStep("register");
+        setRegisterValues((prev) => ({ ...prev, email: verifyEmail }));
+      } else {
+        toast.error(res?.data?.message || "OTP verification failed.");
+      }
+    } catch (err) {
+      toast.error(
+        err?.response?.data?.message ||
+          "OTP verification failed. Please try again.",
+      );
+    } finally {
+      setVerifyingOtp(false);
+    }
+  };
+
+  const resendOtp = async () => {
+    if (countdown > 0) return;
+    const error = validateVerifyEmail();
+    if (error) {
+      setEmailError(error);
+      return;
+    }
+
+    setSendingOtp(true);
+
+    try {
+      const res = await userApi.sendVerificationCode({ email: verifyEmail });
+      if (res?.data?.action ?? true) {
+        toast.success("Verification code resent. Check your email.");
+        setCountdown(30);
+      } else {
+        toast.error(res?.data?.message || "Unable to resend OTP.");
+      }
+    } catch (err) {
+      toast.error(
+        err?.response?.data?.message ||
+          "Unable to resend OTP. Please try again.",
+      );
+    } finally {
+      setSendingOtp(false);
+    }
   };
 
   const validateRegister = () => {
@@ -214,119 +338,211 @@ const ProductDetail = () => {
                 Start Free with Gym Fox
               </h2>
               <p className="text-gray-400">
-                Plan includes 1 month free access. Submit the form to register
-                and you will be redirected to gymfox.softwayx.in.
+                Plan includes 1 month free access. Verify your email first, then
+                complete registration.
               </p>
             </div>
-            <form
-              onSubmit={submitRegisterForm}
-              noValidate
-              className="space-y-5"
-            >
-              <div className="grid grid-cols-2 gap-4">
-                <Input
-                  label="Gym Name"
-                  value={registerValues.gymName}
-                  onChange={handleRegisterChange("gymName")}
-                  error={registerErrors.gymName}
-                  required
-                />
-                <Input
-                  label="Owner Name"
-                  value={registerValues.ownerName}
-                  onChange={handleRegisterChange("ownerName")}
-                  error={registerErrors.ownerName}
-                  required
-                />
+
+            {verificationStep === "email" && (
+              <form
+                onSubmit={sendVerificationCode}
+                noValidate
+                className="space-y-5"
+              >
                 <Input
                   label="Email Address"
                   type="email"
-                  value={registerValues.email}
-                  onChange={handleRegisterChange("email")}
-                  error={registerErrors.email}
+                  value={verifyEmail}
+                  onChange={(e) => {
+                    setVerifyEmail(e.target.value);
+                    setEmailError("");
+                  }}
+                  error={emailError}
                   required
                 />
-                <Input
-                  label="Username"
-                  value={registerValues.username}
-                  onChange={handleRegisterChange("username")}
-                  error={registerErrors.username}
-                  required
-                />
-                <Input
-                  label="Phone Number"
-                  type="tel"
-                  value={registerValues.phone}
-                  onChange={handleRegisterChange("phone")}
-                  error={registerErrors.phone}
-                  required
-                />
-                <div className="relative">
-                  <Input
-                    label="Password"
-                    type={showPassword ? "text" : "password"}
-                    value={registerValues.password}
-                    onChange={handleRegisterChange("password")}
-                    error={registerErrors.password}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400 hover:text-white"
-                  >
-                    {showPassword ? "Hide" : "Show"}
-                  </button>
-                </div>
-                <Input
-                  label="City"
-                  value={registerValues.city}
-                  onChange={handleRegisterChange("city")}
-                />
-                <Input
-                  label="State"
-                  value={registerValues.state}
-                  onChange={handleRegisterChange("state")}
-                />
-                <div className="relative col-span-2">
-                  <textarea
-                    rows={4}
-                    placeholder="Address"
-                    value={registerValues.address}
-                    onChange={handleRegisterChange("address")}
-                    className="input-field peer h-28 resize-none"
-                  />
-                  <label className="input-label top-3 peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-brand-blue peer-focus:bg-brand-dark peer-focus:px-1 peer-[&:not(:placeholder-shown)]:-top-2.5 peer-[&:not(:placeholder-shown)]:text-xs peer-[&:not(:placeholder-shown)]:text-gray-400 peer-[&:not(:placeholder-shown)]:bg-brand-dark peer-[&:not(:placeholder-shown)]:px-1">
-                    Address
-                  </label>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm text-gray-400">
-                  Plan: <span className="text-white">1 Month Free</span> · Start
-                  date:{" "}
-                  <span className="text-white">
-                    {registerValues.planStartDate}
-                  </span>
-                </p>
                 <Button
                   type="submit"
                   variant="primary"
-                  className="w-full sm:w-auto px-6 py-3 text-base"
-                  disabled={registerSubmitting}
+                  className="w-full py-3 text-base"
+                  disabled={sendingOtp}
                 >
-                  {registerSubmitting ? "Submitting..." : "Submit Registration"}
+                  {sendingOtp ? "Sending code..." : "Send Verification Code"}
                 </Button>
-              </div>
-              {registerError && (
-                <p className="text-sm text-red-400">{registerError}</p>
-              )}
-              {successMessage && (
-                <p className="text-sm text-emerald-400">
-                  {successMessage}. Redirecting to gymfox.softwayx.in...
-                </p>
-              )}
-            </form>
+              </form>
+            )}
+
+            {verificationStep === "otp" && (
+              <form onSubmit={verifyOtpCode} noValidate className="space-y-5">
+                <div className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-4">
+                  <p className="text-sm text-gray-300 mb-2">
+                    A code was sent to{" "}
+                    <span className="font-medium text-white">
+                      {verifyEmail}
+                    </span>
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    Enter it below to verify your email and continue.
+                  </p>
+                </div>
+                <Input
+                  label="Enter OTP"
+                  type="text"
+                  value={otp}
+                  onChange={(e) => {
+                    setOtp(e.target.value);
+                    setOtpError("");
+                  }}
+                  error={otpError}
+                  required
+                />
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    className="w-full sm:w-auto py-3 text-base"
+                    disabled={verifyingOtp}
+                  >
+                    {verifyingOtp ? "Verifying..." : "Verify OTP"}
+                  </Button>
+                  <button
+                    type="button"
+                    onClick={resendOtp}
+                    disabled={countdown > 0 || sendingOtp}
+                    className={`text-sm font-medium ${
+                      countdown > 0 || sendingOtp
+                        ? "text-gray-500"
+                        : "text-brand-blue hover:text-white"
+                    }`}
+                  >
+                    {countdown > 0 ? `Resend in ${countdown}s` : "Resend OTP"}
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {verificationStep === "register" && (
+              <form
+                onSubmit={submitRegisterForm}
+                noValidate
+                className="space-y-5"
+              >
+                <div className="rounded-2xl border border-green-500/20 bg-green-500/10 p-4">
+                  <p className="text-sm text-green-100">
+                    Your email has been verified — continue with registration.
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <Input
+                    label="Gym Name"
+                    value={registerValues.gymName}
+                    onChange={handleRegisterChange("gymName")}
+                    error={registerErrors.gymName}
+                    required
+                  />
+                  <Input
+                    label="Owner Name"
+                    value={registerValues.ownerName}
+                    onChange={handleRegisterChange("ownerName")}
+                    error={registerErrors.ownerName}
+                    required
+                  />
+                  <div className="relative">
+                    <Input
+                      label="Email Address"
+                      type="email"
+                      value={registerValues.email}
+                      disabled
+                      error={registerErrors.email}
+                      required
+                    />
+                    <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full border border-green-500/40 bg-green-500/10 px-3 py-1 text-xs text-green-200">
+                      ✓ Verified
+                    </span>
+                  </div>
+                  <Input
+                    label="Username"
+                    value={registerValues.username}
+                    onChange={handleRegisterChange("username")}
+                    error={registerErrors.username}
+                    required
+                  />
+                  <Input
+                    label="Phone Number"
+                    type="tel"
+                    value={registerValues.phone}
+                    onChange={handleRegisterChange("phone")}
+                    error={registerErrors.phone}
+                    required
+                  />
+                  <div className="relative">
+                    <Input
+                      label="Password"
+                      type={showPassword ? "text" : "password"}
+                      value={registerValues.password}
+                      onChange={handleRegisterChange("password")}
+                      error={registerErrors.password}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400 hover:text-white"
+                    >
+                      {showPassword ? "Hide" : "Show"}
+                    </button>
+                  </div>
+                  <Input
+                    label="City"
+                    value={registerValues.city}
+                    onChange={handleRegisterChange("city")}
+                  />
+                  <Input
+                    label="State"
+                    value={registerValues.state}
+                    onChange={handleRegisterChange("state")}
+                  />
+                  <div className="relative col-span-2">
+                    <textarea
+                      rows={4}
+                      placeholder="Address"
+                      value={registerValues.address}
+                      onChange={handleRegisterChange("address")}
+                      className="input-field peer h-28 resize-none"
+                    />
+                    <label className="input-label top-3 peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-brand-blue peer-focus:bg-brand-dark peer-focus:px-1 peer-[&:not(:placeholder-shown)]:-top-2.5 peer-[&:not(:placeholder-shown)]:text-xs peer-[&:not(:placeholder-shown)]:text-gray-400 peer-[&:not(:placeholder-shown)]:bg-brand-dark peer-[&:not(:placeholder-shown)]:px-1">
+                      Address
+                    </label>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-sm text-gray-400">
+                    Plan: <span className="text-white">1 Month Free</span> ·
+                    Start date:{" "}
+                    <span className="text-white">
+                      {registerValues.planStartDate}
+                    </span>
+                  </p>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    className="w-full sm:w-auto px-6 py-3 text-base"
+                    disabled={registerSubmitting}
+                  >
+                    {registerSubmitting
+                      ? "Submitting..."
+                      : "Submit Registration"}
+                  </Button>
+                </div>
+                {registerError && (
+                  <p className="text-sm text-red-400">{registerError}</p>
+                )}
+                {successMessage && (
+                  <p className="text-sm text-emerald-400">
+                    {successMessage}. Redirecting to gymfox.softwayx.in...
+                  </p>
+                )}
+              </form>
+            )}
           </div>
         </div>
       ) : null}
@@ -452,6 +668,57 @@ const ProductDetail = () => {
               ))}
             </div>
           </section>
+
+          {product.faq?.length ? (
+            <section className="mb-20">
+              <div className="text-center mb-10">
+                <h2 className="text-2xl md:text-3xl font-bold mb-3">
+                  Gym <span className="gradient-text">FAQ</span>
+                </h2>
+                <p className="text-gray-400 max-w-2xl mx-auto">
+                  Answers to common questions gym owners ask before choosing the
+                  right gym management platform.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {product.faq.map((item, index) => {
+                  const isOpen = activeFaq === index;
+                  return (
+                    <div
+                      key={item.question}
+                      className="border border-white/10 rounded-3xl bg-[#09101f]/80 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.7)]"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setActiveFaq(isOpen ? -1 : index)}
+                        className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
+                        aria-expanded={isOpen}
+                      >
+                        <span className="text-white font-medium">
+                          {item.question}
+                        </span>
+                        <span
+                          className={`inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 transition-transform duration-300 ${
+                            isOpen
+                              ? "rotate-45 bg-brand-blue/10 text-brand-blue"
+                              : "bg-white/5 text-gray-300"
+                          }`}
+                        >
+                          +
+                        </span>
+                      </button>
+                      {isOpen ? (
+                        <div className="px-6 pb-6 text-gray-400 leading-7">
+                          {item.answer}
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          ) : null}
 
           {/* Screenshots */}
           <section className="mb-20">

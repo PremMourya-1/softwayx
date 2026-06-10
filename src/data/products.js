@@ -36,6 +36,33 @@ export const products = [
       "Dashboard Analytics (12-month)",
       "Subscription Plans & Billing",
     ],
+    faq: [
+      {
+        question: "Is there a free trial?",
+        answer:
+          "Yes — Gym Fox includes a one-month free trial so gym owners can explore membership, billing, and reporting without any upfront cost.",
+      },
+      {
+        question: "Can I manage multiple branches?",
+        answer:
+          "Absolutely. Gym Fox supports multi-branch management, allowing you to centralize member data, payments, and performance across each location.",
+      },
+      {
+        question: "Is member data secure?",
+        answer:
+          "Member details are protected with secure storage practices and access controls, so sensitive gym and client information stays safe.",
+      },
+      {
+        question: "Can I export reports?",
+        answer:
+          "Yes — you can export reports for payments, renewals, membership status, and attendance to keep your records or share with your team.",
+      },
+      {
+        question: "How does renewal tracking work?",
+        answer:
+          "Gym Fox automatically tracks expiring plans and pending payments, so you get alerts and renewal summaries to keep member retention on track.",
+      },
+    ],
     assetFolder: "gymSs",
     domain: "www.gymfox.softwayx.in",
     screenshots: [

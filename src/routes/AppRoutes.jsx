@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "../pages/Home";
 import ProductDetail from "../pages/ProductDetail";
 import Register from "../pages/Register";
@@ -7,20 +7,24 @@ import Contact from "../pages/Contact";
 import ThankYou from "../pages/ThankYou";
 import Privacy from "../pages/Privacy";
 import Terms from "../pages/Terms";
+import Layout from "../Layout/Layout";
 
 const AppRoutes = () => {
   return (
-    <Switch>
-      <Route exact path="/" component={Home} />
-      <Route path="/product/:id" component={ProductDetail} />
-      <Route path="/register" component={Register} />
-      <Route path="/about" component={About} />
-      <Route path="/contact" component={Contact} />
-      <Route path="/thank-you" component={ThankYou} />
-      <Route path="/privacy" component={Privacy} />
-      <Route path="/terms" component={Terms} />
-      <Redirect to="/" />
-    </Switch>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Navigate replace to="/home" />} />
+        <Route path="home" element={<Home />} />
+        <Route path="product/:id" element={<ProductDetail />} />
+        <Route path="register" element={<Register />} />
+        <Route path="about" element={<About />} />
+        <Route path="contact" element={<Contact />} />
+        <Route path="thank-you" element={<ThankYou />} />
+        <Route path="privacy" element={<Privacy />} />
+        <Route path="terms" element={<Terms />} />
+        <Route path="*" element={<Navigate replace to="/home" />} />
+      </Route>
+    </Routes>
   );
 };
 

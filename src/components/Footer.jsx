@@ -10,11 +10,12 @@ const footerLinks = {
   Company: [
     { label: "About Us", to: "/about" },
     { label: "Contact", to: "/contact" },
-    { label: "Register", to: "/register" },
+    // { label: "Register", to: "/register" },
   ],
   Legal: [
     { label: "Privacy Policy", to: "/privacy" },
     { label: "Terms & Conditions", to: "/terms" },
+    { label: "Refund Policy", to: "/refund" },
   ],
 };
 

@@ -4,9 +4,9 @@ import { useScrolled } from "../hooks/useScrolled";
 import logo from "../assets/logo.png";
 
 const navLinks = [
-  { label: "Home", to: "/" },
-  { label: "About", to: "/#about" },
-  { label: "Products", to: "/#products" },
+  { label: "Home", to: "/home" },
+  { label: "About", to: "/about" },
+  { label: "Products", to: "/products" },
   { label: "Contact", to: "/contact" },
 ];
 
@@ -14,16 +14,20 @@ const Navbar = () => {
   const scrolled = useScrolled(20);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const linkClass = ({ isActive }) =>
+    `btn-ghost ${isActive ? "text-white bg-white/10" : "text-white"}`;
+
   return (
     <nav
-      className={`fixed  top-0 left-0 right-0 z-50 transition-all duration-300
-        ${scrolled ? "glass-dark shadow-glow-sm" : "bg-transparent"}`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "glass-dark shadow-glow-sm" : "bg-transparent"
+      }`}
     >
       <div className="container-custom">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link
-            to="/"
+            to="/home"
             className="flex items-center gap-2 text-white font-bold text-xl"
             onClick={() => setMenuOpen(false)}
           >
@@ -37,23 +41,19 @@ const Navbar = () => {
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
-              <Link
+              <NavLink
                 key={link.to}
-                // exact={link.to === "/"}
                 to={link.to}
-                className="btn-ghost"
-                activeClassName="text-white bg-white/10"
+                end={link.to === "/home"}
+                className={linkClass}
               >
                 {link.label}
-              </Link>
+              </NavLink>
             ))}
           </div>
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            {/* <Link to="/register" className="btn-secondary text-sm px-4 py-2">
-              Sign In
-            </Link> */}
             <Link to="/contact" className="btn-primary text-sm px-4 py-2">
               Contact Us
             </Link>
@@ -80,10 +80,13 @@ const Navbar = () => {
             {navLinks.map((link) => (
               <NavLink
                 key={link.to}
-                exact={link.to === "/"}
                 to={link.to}
-                className="btn-ghost justify-start px-3 py-2.5 text-base"
-                activeClassName="text-white bg-white/10"
+                end={link.to === "/home"}
+                className={({ isActive }) =>
+                  `btn-ghost justify-start px-3 py-2.5 text-base ${
+                    isActive ? "text-white bg-white/10" : "text-white"
+                  }`
+                }
                 onClick={() => setMenuOpen(false)}
               >
                 {link.label}

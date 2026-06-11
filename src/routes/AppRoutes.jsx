@@ -7,6 +7,8 @@ import Contact from "../pages/Contact";
 import ThankYou from "../pages/ThankYou";
 import Privacy from "../pages/Privacy";
 import Terms from "../pages/Terms";
+import Refund from "../pages/Refund";
+import Products from "../pages/Products";
 import Layout from "../Layout/Layout";
 
 const AppRoutes = () => {
@@ -22,6 +24,8 @@ const AppRoutes = () => {
         <Route path="thank-you" element={<ThankYou />} />
         <Route path="privacy" element={<Privacy />} />
         <Route path="terms" element={<Terms />} />
+        <Route path="refund" element={<Refund />} />
+        <Route path="products" element={<Products />} />
         <Route path="*" element={<Navigate replace to="/home" />} />
       </Route>
     </Routes>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { products } from "../data/products";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import FaqSection from "../components/FaqSection";
 import { userApi } from "../Service/api";
 import toast from "react-hot-toast";
 
@@ -41,7 +42,6 @@ const ProductDetail = () => {
   const [registerError, setRegisterError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [activeFaq, setActiveFaq] = useState(0);
   const [verificationStep, setVerificationStep] = useState("email");
   const [verifyEmail, setVerifyEmail] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -670,54 +670,12 @@ const ProductDetail = () => {
           </section>
 
           {product.faq?.length ? (
-            <section className="mb-20">
-              <div className="text-center mb-10">
-                <h2 className="text-2xl md:text-3xl font-bold mb-3">
-                  Gym <span className="gradient-text">FAQ</span>
-                </h2>
-                <p className="text-gray-400 max-w-2xl mx-auto">
-                  Answers to common questions gym owners ask before choosing the
-                  right gym management platform.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                {product.faq.map((item, index) => {
-                  const isOpen = activeFaq === index;
-                  return (
-                    <div
-                      key={item.question}
-                      className="border border-white/10 rounded-3xl bg-[#09101f]/80 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.7)]"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => setActiveFaq(isOpen ? -1 : index)}
-                        className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
-                        aria-expanded={isOpen}
-                      >
-                        <span className="text-white font-medium">
-                          {item.question}
-                        </span>
-                        <span
-                          className={`inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 transition-transform duration-300 ${
-                            isOpen
-                              ? "rotate-45 bg-brand-blue/10 text-brand-blue"
-                              : "bg-white/5 text-gray-300"
-                          }`}
-                        >
-                          +
-                        </span>
-                      </button>
-                      {isOpen ? (
-                        <div className="px-6 pb-6 text-gray-400 leading-7">
-                          {item.answer}
-                        </div>
-                      ) : null}
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
+            <FaqSection
+              heading="Gym"
+              accent="FAQ"
+              subheading="Answers to common questions gym owners ask before choosing the right gym management platform."
+              items={product.faq}
+            />
           ) : null}
 
           {/* Screenshots */}

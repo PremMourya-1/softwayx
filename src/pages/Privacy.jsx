@@ -1,66 +1,95 @@
 const sections = [
-    {
-        title: '1. Information We Collect',
-        content:
-            'We collect information you provide directly to us when you register for an account, use our services, or contact us for support. This includes your name, email address, phone number, and business information.',
-    },
-    {
-        title: '2. How We Use Your Information',
-        content:
-            'We use the information we collect to provide, maintain, and improve our services, process transactions, send you technical notices and support messages, and respond to your comments and questions.',
-    },
-    {
-        title: '3. Data Sharing',
-        content:
-            'We do not sell, trade, or otherwise transfer your personally identifiable information to outside parties. We may share your data with trusted third parties who assist us in operating our platform, subject to confidentiality agreements.',
-    },
-    {
-        title: '4. Data Security',
-        content:
-            'We implement industry-standard security measures including AES-256 encryption, SSL/TLS in transit, and regular security audits to protect your data from unauthorized access, alteration, or disclosure.',
-    },
-    {
-        title: '5. Cookies',
-        content:
-            'We use cookies and similar tracking technologies to enhance your experience on our platform. You can control cookie settings through your browser preferences.',
-    },
-    {
-        title: '6. Your Rights',
-        content:
-            'You have the right to access, update, or delete your personal information at any time. You may also opt out of marketing communications by using the unsubscribe link in any email.',
-    },
-    {
-        title: '7. Contact Us',
-        content:
-            'If you have questions about this Privacy Policy, please contact us at privacy@premsoft.in or through our Contact page.',
-    },
+  {
+    title: "1. Information We Collect",
+    content:
+      "We collect information that you provide directly to us during registration, account setup, or while using our services. This may include your name, email address, phone number, business name, and address.",
+  },
+  {
+    title: "2. Authentication & Account Security",
+    content:
+      "To secure user accounts, we use email verification through OTP during registration. Users can log in using their registered email address or mobile number along with their password.",
+  },
+  {
+    title: "3. How We Use Your Information",
+    content:
+      "We use the collected information to provide, maintain, and improve our services, verify user accounts, manage subscriptions, provide customer support, and ensure platform security and functionality.",
+  },
+  {
+    title: "4. Payments",
+    content:
+      "Payments for subscription-based services are securely processed through trusted third-party payment gateways such as Razorpay. We do not store or process your debit card, credit card, or banking information on our servers.",
+  },
+  {
+    title: "5. Cookies & Authentication Tokens",
+    content:
+      "We use cookies and authentication tokens to keep users securely logged in and improve their experience on our platform. These technologies help us maintain account security and platform functionality.",
+  },
+  {
+    title: "6. Third-Party Services",
+    content:
+      "We may use trusted third-party services such as Resend for email delivery, Vercel for hosting and deployment, and MongoDB Atlas for secure database infrastructure. These providers only process data necessary to support our services.",
+  },
+  {
+    title: "7. Data Sharing",
+    content:
+      "We do not sell, rent, or trade your personal information to third parties. User information may only be shared with trusted service providers required to operate and maintain our platform securely.",
+  },
+  {
+    title: "8. Data Security",
+    content:
+      "We implement reasonable security measures to help protect user information from unauthorized access, misuse, or disclosure. However, no online platform can guarantee complete security.",
+  },
+  {
+    title: "9. Emails & Communications",
+    content:
+      "We may send important service-related emails such as account verification OTPs, password reset emails, security notifications, and essential account updates. We currently do not send promotional or marketing emails.",
+  },
+  {
+    title: "10. User Responsibility",
+    content:
+      "Users are responsible for maintaining the confidentiality of their account credentials and for all activities performed under their account.",
+  },
+  {
+    title: "11. Changes to This Privacy Policy",
+    content:
+      "We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision date.",
+  },
+  {
+    title: "12. Contact Us",
+    content:
+      "If you have any questions regarding this Privacy Policy, you can contact us at [softwayxinfo@gmail.com](mailto:softwayxinfo@gmail.com).",
+  },
 ];
 
 const Privacy = () => {
-    return (
-        <main className="section-padding-top pt-24 section-padding-bottom">
-            <div className="container-custom">
-                <div className="max-w-3xl mx-auto">
-                    <div className="mb-10 animate-fade-in">
-                        <span className="badge mb-4 inline-block">Legal</span>
-                        <h1 className="section-title mb-3">
-                            Privacy <span className="gradient-text">Policy</span>
-                        </h1>
-                        <p className="text-gray-400 text-sm">Last updated: May 5, 2026</p>
-                    </div>
+  return (
+    <main className="section-padding-top pt-24 section-padding-bottom">
+      <div className="container-custom">
+        <div className="max-w-3xl mx-auto">
+          <div className="mb-10 animate-fade-in">
+            <span className="badge mb-4 inline-block">Legal</span>
+            <h1 className="section-title mb-3">
+              Privacy <span className="gradient-text">Policy</span>
+            </h1>
+            <p className="text-gray-400 text-sm">Last updated: May 5, 2026</p>
+          </div>
 
-                    <div className="space-y-6 animate-slide-up">
-                        {sections.map((sec) => (
-                            <div key={sec.title} className="card">
-                                <h2 className="text-white font-semibold text-lg mb-3">{sec.title}</h2>
-                                <p className="text-gray-400 text-sm leading-relaxed">{sec.content}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </main>
-    );
+          <div className="space-y-6 animate-slide-up">
+            {sections.map((sec) => (
+              <div key={sec.title} className="card">
+                <h2 className="text-white font-semibold text-lg mb-3">
+                  {sec.title}
+                </h2>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  {sec.content}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </main>
+  );
 };
 
 export default Privacy;

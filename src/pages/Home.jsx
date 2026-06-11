@@ -173,12 +173,21 @@ const Home = () => {
                     Designed for fitness business growth
                   </p>
                 </div>
-                <Link
-                  to="/product/gym-crm"
-                  className="btn-primary !rounded-full text-base px-6 py-2 w-full mt-3"
-                >
-                  Start Free Trial
-                </Link>
+                <div className="flex gap-4 mt-4">
+                  <Link
+                    to="/product/gym-crm"
+                    className="btn-primary grow !rounded-full text-base px-6 py-2  "
+                  >
+                    Start Free Trial
+                  </Link>
+                  <a
+                    target="_blank"
+                    href="https://gymfox.softwayx.in/login"
+                    className="btn-secondary grow text-base px-6 py-2  rounded-full"
+                  >
+                    Dashboard Login
+                  </a>
+                </div>
               </div>
             </div>
           </div>

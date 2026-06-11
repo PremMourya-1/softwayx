@@ -323,7 +323,7 @@ const ProductDetail = () => {
           onKeyDown={(e) => e.key === "Escape" && closeRegisterModal()}
         >
           <div
-            className="relative w-full max-w-3xl rounded-3xl bg-[#08101e] p-6 md:p-8 shadow-2xl max-h-[calc(100vh-4rem)] overflow-y-auto modal-scrollbar"
+            className="relative w-full max-w-xl rounded-3xl bg-[#08101e] p-6 md:p-8 shadow-2xl max-h-[calc(100vh-4rem)] overflow-y-auto modal-scrollbar"
             onClick={(e) => e.stopPropagation()}
           >
             <button

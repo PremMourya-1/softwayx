@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import chinu from "../assets/team/me.png";
-import chabi from "../assets/team/chabi.png";
+import chabi from "../assets/team/chabi.PNG";
 import bhaiyo from "../assets/team/bhaiyo.png";
 
 const teamMembers = [

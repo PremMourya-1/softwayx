@@ -4,7 +4,7 @@ import { useScrolled } from "../hooks/useScrolled";
 import logo from "../assets/logo.png";
 
 const navLinks = [
-  { label: "Home", to: "/home" },
+  { label: "Home", to: "/" },
   { label: "About", to: "/about" },
   { label: "Products", to: "/products" },
   { label: "Contact", to: "/contact" },
@@ -27,7 +27,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link
-            to="/home"
+            to="/"
             className="flex items-center gap-2 text-white font-bold text-xl"
             onClick={() => setMenuOpen(false)}
           >
@@ -44,7 +44,7 @@ const Navbar = () => {
               <NavLink
                 key={link.to}
                 to={link.to}
-                end={link.to === "/home"}
+                end={link.to === "/"}
                 className={linkClass}
               >
                 {link.label}

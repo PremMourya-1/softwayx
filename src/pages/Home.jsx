@@ -224,7 +224,7 @@ const Home = () => {
         accent="FAQ"
         subheading="Common questions about Softwayx, our services, products, and support."
         items={homeFaqItems}
-        className="section-padding bg-[#07101a] rounded-[2rem]"
+        className="section-padding bg-[#07101a] "
       />
 
       {/* ── Why Us ── */}

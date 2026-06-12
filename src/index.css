@@ -118,3 +118,55 @@
     @apply flex items-start gap-3 text-gray-300 text-sm md:text-base;
   }
 }
+
+.mouse-move-effect {
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  pointer-events: none;
+
+  /* z-index: 20; */
+
+  will-change: transform;
+}
+
+.mouse-move-effect__dot-circle {
+  width: 60px;
+  height: 60px;
+
+  border-radius: 9999px;
+
+  border: 2px dashed rgba(255, 255, 255, 0.7);
+
+  backdrop-filter: blur(4px);
+
+  opacity: 0.8;
+
+  box-shadow: 0 0 24px rgba(96, 165, 250, 0.16);
+
+  animation: rotateCircle 8s linear infinite;
+}
+
+@keyframes rotateCircle {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mouse-move-effect__dot-circle::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border-radius: 9999px;
+  border: 1px dashed rgba(255, 255, 255, 0.45);
+  opacity: 0.75;
+}
+
+.mouse-move-effect__dot-circle:hover {
+  opacity: 1;
+}

@@ -15,8 +15,8 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<Navigate replace to="/home" />} />
-        <Route path="home" element={<Home />} />
+        {/* <Route index element={<Navigate replace to="/home" />} /> */}
+        <Route path="/" element={<Home />} />
         <Route path="product/:id" element={<ProductDetail />} />
         <Route path="register" element={<Register />} />
         <Route path="about" element={<About />} />

@@ -121,7 +121,7 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="relative rounded-[40px] border border-white/10 bg-[#08101e]/95 p-8 shadow-[0_40px_120px_-70px_rgba(37,99,235,0.6)] backdrop-blur-xl">
+            <div className="relative rounded-[40px] border border-white/10 bg-[#08101e]/95 md:p-8 p-4 shadow-[0_40px_120px_-70px_rgba(37,99,235,0.6)] backdrop-blur-xl">
               <div className="flex items-center justify-between gap-4 mb-6">
                 <div>
                   <p className="text-xs uppercase tracking-[0.22em] text-brand-blue">
@@ -173,7 +173,7 @@ const Home = () => {
                     Designed for fitness business growth
                   </p>
                 </div>
-                <div className="flex gap-4 mt-4">
+                <div className="flex gap-4 mt-4 flex-col sm:flex-row">
                   <Link
                     to="/product/gym-crm"
                     className="btn-primary grow !rounded-full text-base px-6 py-2  "
@@ -218,14 +218,17 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      <FaqSection
-        heading="Softwayx"
-        accent="FAQ"
-        subheading="Common questions about Softwayx, our services, products, and support."
-        items={homeFaqItems}
-        className="section-padding bg-[#07101a] "
-      />
+      <section className="section-padding bg-[#07101a] ">
+        <div className="container-custom">
+          <FaqSection
+            heading="Softwayx"
+            accent="FAQ"
+            subheading="Common questions about Softwayx, our services, products, and support."
+            items={homeFaqItems}
+            className=""
+          />
+        </div>
+      </section>
 
       {/* ── Why Us ── */}
       <section className="section-padding bg-[#020a13]">

@@ -547,7 +547,7 @@ const ProductDetail = () => {
         </div>
       ) : null}
 
-      <main className="section-padding-top pt-24 md:pt-28 px-4 sm:px-6 lg:px-0">
+      <main className="section-padding-top pt-24 md:pt-28 px-0 ">
         <div className="container-custom">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
@@ -564,7 +564,9 @@ const ProductDetail = () => {
             <span>/</span>
             <span className="text-white">{product.title}</span>
           </nav>
-          {/* Hero */}
+        </div>
+        {/* Hero */}
+        <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_1fr] gap-12 xl:gap-16 items-center mb-20 lg:mb-28">
             {/* Left Content */}
             <div className="animate-slide-up relative z-10">
@@ -640,14 +642,16 @@ const ProductDetail = () => {
                 <img
                   src={product.hero}
                   alt={product.name}
-                  className="md:max-w-[500px] max-w-[380px] h-full object-contain m-auto"
+                  className="md:max-w-[500px] max-w-[300px] h-full object-contain m-auto"
                 />
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Features */}
-          <section className="mb-20">
+        {/* Features */}
+        <section className="mb-20">
+          <div className="container-custom">
             <div className="text-center mb-10">
               <h2 className="text-2xl md:text-3xl font-bold mb-3">
                 Key <span className="gradient-text">Features</span>
@@ -667,19 +671,25 @@ const ProductDetail = () => {
                 </div>
               ))}
             </div>
-          </section>
+          </div>
+        </section>
 
-          {product.faq?.length ? (
-            <FaqSection
-              heading="Gym"
-              accent="FAQ"
-              subheading="Answers to common questions gym owners ask before choosing the right gym management platform."
-              items={product.faq}
-            />
-          ) : null}
+        <section className="section-padding bg-[#07101a] ">
+          <div className="container-custom">
+            {product.faq?.length ? (
+              <FaqSection
+                heading="Gym"
+                accent="FAQ"
+                subheading="Answers to common questions gym owners ask before choosing the right gym management platform."
+                items={product.faq}
+              />
+            ) : null}
+          </div>
+        </section>
 
-          {/* Screenshots */}
-          <section className="mb-20">
+        {/* Screenshots */}
+        <section className="mb-20">
+          <div className="container-custom">
             <div className="text-center mb-10">
               <h2 className="text-2xl md:text-3xl font-bold mb-3">
                 Product <span className="gradient-text">Screenshots</span>
@@ -754,10 +764,12 @@ const ProductDetail = () => {
                 );
               })}
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* CTA */}
-          <section className="mb-16">
+        {/* CTA */}
+        <section className="mb-16">
+          <div className="container-custom">
             <div className="glass rounded-2xl p-8 md:p-12 text-center relative overflow-hidden">
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${product.color} opacity-10 pointer-events-none`}
@@ -792,8 +804,8 @@ const ProductDetail = () => {
                 </div>
               </div>
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
       </main>
     </>
   );

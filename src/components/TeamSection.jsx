@@ -11,6 +11,11 @@ const teamMembers = [
     photo: chinu,
   },
   {
+    name: "Pawan Mourya",
+    role: "Marketing Head",
+    photo: bhaiyo,
+  },
+  {
     name: "Ravi Kasotiya",
     role: "Design Lead",
     photo: chabi,
@@ -20,11 +25,6 @@ const teamMembers = [
     role: "Development Lead",
     photo:
       "https://ui-avatars.com/api/?name=Karan+Mourya&background=111827&color=ffffff&rounded=true",
-  },
-  {
-    name: "Pawan Mourya",
-    role: "Marketing Head",
-    photo: bhaiyo,
   },
 ];
 
